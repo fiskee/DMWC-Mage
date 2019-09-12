@@ -22,7 +22,9 @@ end
 
 local function Wand()
     if not Player.Moving and not DMW.Helpers.Queue.Spell and not IsAutoRepeatSpell(Spell.Shoot.SpellName) and (DMW.Time - WandTime) > 0.7 and (Target.Distance > 1 or not Setting("Auto Attack In Melee")) and
-    (Spell.Frostbolt:CD() > 2 or (not Setting("Frostbolt") or Player.PowerPct <= Setting("Frostbolt Mana") or Target.TTD < Spell.Frostbolt:CastTime()))
+    (Spell.Frostbolt:CD() > 2 or ((not Setting("Frostbolt") or Player.PowerPct <= Setting("Frostbolt Mana") or Target.TTD < Spell.Frostbolt:CastTime())) and
+    ((not Setting("Fireball") or Player.PowerPct <= Setting("Fireball Mana") or Target.TTD < Spell.Fireball:CastTime())) and
+    ((not Setting("Fire Blast") or Player.PowerPct <= Setting("Fire Blast Mana"))))
     and Spell.Shoot:Cast(Target) then
         WandTime = DMW.Time
         return true
@@ -82,7 +84,13 @@ function Mage.Rotation()
         if (not DMW.Player.Equipment[18] or (Target.Distance <= 1 and Setting("Auto Attack In Melee"))) and not IsCurrentSpell(Spell.Attack.SpellID) then
             StartAttack()
         end
+        if Setting("Fireball") and Target.Facing and not Player.Moving and Player.PowerPct >= Setting("Fireball Mana") and (Target.TTD > Spell.Fireball:CastTime() or (Target.Distance > 5 and not DMW.Player.Equipment[18])) and (not Setting("Frostbolt") or Player.PowerPct < Setting("Frostbolt Mana") or Debuff.Frostbolt:Remain(Target) > Spell.Fireball:CastTime() or (Spell.Frostbolt:LastCast() and UnitIsUnit(Spell.Frostbolt.LastBotTarget, Target.Pointer))) and Spell.Fireball:Cast(Target) then
+            return true
+        end
         if Setting("Frostbolt") and Target.Facing and not Player.Moving and Player.PowerPct >= Setting("Frostbolt Mana") and (Target.TTD > Spell.Frostbolt:CastTime() or (Target.Distance > 5 and not DMW.Player.Equipment[18])) and Spell.Frostbolt:Cast(Target) then
+            return true
+        end
+        if Setting("Fire Blast") and Target.Facing and Player.PowerPct >= Setting("Fire Blast Mana") and Spell.FireBlast:Cast(Target) then
             return true
         end
         if DMW.Player.Equipment[18] and Target.Facing and Wand() then
