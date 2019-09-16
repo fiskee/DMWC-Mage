@@ -22,9 +22,9 @@ end
 
 local function Wand()
     if not Player.Moving and not DMW.Helpers.Queue.Spell and not IsAutoRepeatSpell(Spell.Shoot.SpellName) and (DMW.Time - WandTime) > 0.7 and (Target.Distance > 1 or not Setting("Auto Attack In Melee")) and
-    (Spell.Frostbolt:CD() > 2 or ((not Setting("Frostbolt") or Player.PowerPct <= Setting("Frostbolt Mana") or Target.TTD < Spell.Frostbolt:CastTime())) and
-    ((not Setting("Fireball") or Player.PowerPct <= Setting("Fireball Mana") or Target.TTD < Spell.Fireball:CastTime())) and
-    ((not Setting("Fire Blast") or Player.PowerPct <= Setting("Fire Blast Mana"))))
+    (Spell.Frostbolt:CD() > 2 or (((not Setting("Frostbolt") or Player.PowerPct <= Setting("Frostbolt Mana") or Target.TTD < Spell.Frostbolt:CastTime())) and
+    (not Setting("Fireball") or Player.PowerPct <= Setting("Fireball Mana") or Target.TTD < Spell.Fireball:CastTime()) and
+    (not Setting("Fire Blast") or Player.PowerPct <= Setting("Fire Blast Mana"))))
     and Spell.Shoot:Cast(Target) then
         WandTime = DMW.Time
         return true
