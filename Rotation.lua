@@ -32,16 +32,25 @@ local function Wand()
 end
 
 local function Defensive()
+    if Setting("Ice Barrier") and Buff.IceBarrier:Remain() < 3 and Spell.IceBarrier:Cast(Player) then
+	    return true
+	end
     if Setting("Healthstone") and Player.HP < Setting("Healthstone HP") and (Item.MajorHealthstone:Use(Player) or Item.GreaterHealthstone:Use(Player) or Item.Healthstone:Use(Player) or Item.LesserHealthstone:Use(Player) or Item.MinorHealthstone:Use(Player)) then
         return true
     end
+	if Setting("Frost Nova") and Player.Moving and Target.Distance < 13 and Spell.FrostNova:Cast(Player) then
+		return true
+	end
+	if Setting("Cone of Cold") and Target.Facing and Target.Distance < 8 and select(2, Target:GetEnemies(8, 2)) >= Setting("Cone of Cold Units") and Spell.ConeOfCold:Cast(Player) then
+	  return true
+	end
 end
 
 local function AutoBuff()
     if Buff.ArcaneIntellect:Remain() < 300 and Spell.ArcaneIntellect:Cast(Player) then
         return true
     end
-    if Buff.FrostArmor:Remain() < 300 and Spell.FrostArmor:Cast(Player) then
+    if Buff.IceArmor:Remain() < 300 and Spell.IceArmor:Cast(Player) then
         return true
     end
 end
@@ -63,7 +72,6 @@ function Mage.Rotation()
             return true
         end
     end
-
     if Target and Target.ValidEnemy and Target.Distance < 40 then
         if Defensive() then
             return true
