@@ -1,4 +1,4 @@
-## Interface: 11320
+## Interface: 11305
 ## Title: DoMeWhen Classic - Mage
 ## Author: Fisker
 ## Notes: Mage Rotation for DoMeWhen Classic
