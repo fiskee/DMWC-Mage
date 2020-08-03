@@ -53,6 +53,9 @@ local function AutoBuff()
     if Buff.IceArmor:Remain() < 300 and Spell.IceArmor:Cast(Player) then
         return true
     end
+    if not Buff.IceArmor:Exist() and Buff.FrostArmor:Remain() < 300 and Spell.FrostArmor:Cast(Player) then
+        return true
+    end
 end
 
 function Mage.Rotation()
